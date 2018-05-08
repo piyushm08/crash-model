@@ -30,15 +30,39 @@ BASE_DIR = os.path.dirname(
 DATA_FP = BASE_DIR + '/data/processed/'
 
 def predict_forward(split_week, split_year, seg_data, crash_data):
-		"""simple function to predict crashes for specific week/year"""
-		test_crash = format_crash_data(crash_data, 'crash', split_week, split_year)
-		test_crash_segs = test_crash.merge(seg_data, left_on='segment_id', right_on='segment_id')
-		preds = trained_model.predict_proba(test_crash_segs[best_model_features])[::,1]
-		perf = roc_auc_score(test_crash_segs['target'], preds)
-		print('Week {0}, year {1}, perf {2}'.format(split_week, split_year, perf))
-		if perf<=perf_cutoff:
-			 print('Model performs below AUC %s, may not be usable' % perf_cutoff)
-		return(preds)
+	"""simple function to predict crashes for specific week/year"""
+	test_crash = format_crash_data(crash_data, 'crash', split_week, split_year)
+	test_crash_segs = test_crash.merge(seg_data, left_on='segment_id', right_on='segment_id')
+	preds = trained_model.predict_proba(test_crash_segs[best_model_features])[::,1]
+	perf = roc_auc_score(test_crash_segs['target'], preds)
+	print('Week {0}, year {1}, perf {2}'.format(split_week, split_year, perf))
+	if perf<=perf_cutoff:
+		 print('Model performs below AUC %s, may not be usable' % perf_cutoff)
+	return(preds)
+
+def explanatory_features(top_ranked_df, model_data, model, features):
+	""" Attempts to explain high-risk segments based on important features from model"""
+	# checking if has coefficients or has importances
+	if hasattr(model, 'feature_importances_'):
+		magnitude = model.feature_importances_
+	else:
+		magnitude = model.coef_
+	f_w_magnitude = zip(features, magnitude)
+	# top 3 features
+	f_w_magnitude = sorted(f_w_magnitude, key=lambda x: x[1])[-3:]
+	top_f = [x[0] for x in f_w_magnitude]
+	median_f = model_data[top_f].median()
+	# add information to top rank df
+	ranked_w_info = top_ranked_df.merge(model_data[top_f+['segment_id']], on='segment_id')
+	# % bigger than median
+	ranked_w_magnitude = ranked_w_info[top_f]/median_f
+	# in the case that median is 0, result is inf, so just label that as >0
+	ranked_w_magnitude.replace(np.inf, '>0', inplace=True)
+	ranked_w_magnitude.replace(np.NaN, '==0', inplace=True)
+	ranked_w_magnitude.columns = [c+'_pct_over_median' for c in ranked_w_magnitude.columns]
+	ranked_w_info = pd.concat([top_ranked_df.reset_index(drop=True), ranked_w_magnitude], axis=1)
+	return(ranked_w_info)
+
 
 #Model parameters
 params = dict()
@@ -238,10 +262,9 @@ if __name__ == '__main__':
 		print('Model performs below AUC %s, may not be usable' % perf_cutoff)
 
 	# train on full data
+	# TODO: this is trainingon all data, but the predict_forward is for all weeks
+	# technically, that's not best practice
 	trained_model = best_model.fit(data_model[best_model_features], data_model['target'])
-
-	# running this to test performance at different weeks
-	tuned_model = skl.LogisticRegression(**test.rundict['LR_base']['bp'])
 
 	# predict for all weeks past 4 months
 	all_weeks = data_nonzero[['year','week']].drop_duplicates().sort_values(['year','week']).values[16:]
@@ -254,8 +277,17 @@ if __name__ == '__main__':
 	df_pred = pd.DataFrame(pred_all_weeks.T, 
 		index=data_segs.segment_id.values, 
 		columns=pd.MultiIndex.from_tuples([tuple(w) for w in all_weeks]))
+	
 	# has year-week column index, need to stack for year-week index
 	df_pred = df_pred.stack(level=[0,1])
 	df_pred = df_pred.reset_index()
 	df_pred.columns = ['segment_id', 'year', 'week', 'prediction']
 	df_pred.to_csv(os.path.join(DATA_FP, 'seg_with_predicted.csv'), index=False)
+
+	# take the last week, output top ranked
+	top_ranked = df_pred.groupby('segment_id').apply(lambda g: g.iloc[-1])
+	top_ranked = top_ranked.sort_values('prediction').iloc[-10:]
+
+	# get explanatory features and % more
+	ranked_w_info = explanatory_features(top_ranked, data_model, trained_model, features)
+	ranked_w_info.to_csv(os.path.join(DATA_FP, 'top_predicted.csv'))

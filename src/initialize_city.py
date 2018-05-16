@@ -4,13 +4,19 @@ import shutil
 import sys
 from data.util import geocode_address
 
+#pass path to create in into a argument
+#test with small csv for crashes and concerns
+#Mount and test with changes in 
+
+#todo check how to pass this then, actually, not in test
 BASE_DIR = os.path.dirname(
     os.path.dirname(
         os.path.abspath(__file__)))
 
 
 def make_config_file(yml_file, city, folder, crash, concern):
-    f = open(yml_file, 'w')
+
+    f = open(yml_file, 'w+')
 
     address = geocode_address(city)
     f.write(
@@ -74,7 +80,10 @@ if __name__ == '__main__':
                         help="crash file path")
     parser.add_argument('-concern', '--concern_file', type=str,
                         help="concern file path")
-
+    parser.add_argument('-basePath', '--base_path', type=str,
+                        help="base file path")
+    parser.add_argument('-configPath', '--config_path', type=str,
+                        help="base file path")
     args = parser.parse_args()
     if not args.city:
         print "city required"
@@ -85,8 +94,18 @@ if __name__ == '__main__':
     if not args.crash_file:
         print "crash file required"
         sys.exit()
-
-    DATA_FP = os.path.join(BASE_DIR, 'data', args.folder)
+    if not args.base_path:
+        print "base path for files required"
+        sys.exit()
+    if not args.config_path:
+        print "config path for files required"
+        sys.exit()        
+    print "in init city..."
+    #DATA_FP = os.path.join(BASE_DIR, 'data', args.folder)
+    DATA_FP = args.base_path+ '/data'+ args.folder
+    print "args are"
+    print args
+    print "data_fp is " + args.base_path+ '/data'+ args.folder
 
     crash = args.crash_file.split('/')[-1]
     crash_dir = os.path.join(DATA_FP, 'raw', 'crashes')
@@ -113,8 +132,11 @@ if __name__ == '__main__':
     else:
         print args.folder + " already initialized, skipping"
 
+    #actually should pass in 'src/config/config_'
     yml_file = os.path.join(
-        BASE_DIR, 'src/config/config_' + args.folder + '.yml')
+        args.config_path + args.folder + '.yml')
+    print "yml path is: " + yml_file
+
     if not os.path.exists(yml_file):
         make_config_file(yml_file, args.city, args.folder, crash, concern)
 

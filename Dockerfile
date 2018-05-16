@@ -1,4 +1,4 @@
-FROM continuumio/anaconda
+FROM continuumio/anaconda:4.4.0
 
 # Set package installer as non-interactive
 ENV DEBIAN_FRONTEND noninteractive

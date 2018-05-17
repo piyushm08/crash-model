@@ -80,20 +80,23 @@ def train_model(config_file, DATA_FP):
     ])
 
 
-def visualize(name):
+def visualize(name, end_year):
+
     subprocess.check_call([
         'python',
         '-m',
-        'visualization.reports.historical_crash_map',
+        'visualization.historical_crash_map',
         '-c',
-        name,
-    ])
+        name
+    ]
+        + (['-y', str(end_year-1)] if end_year else [])
+    )
 
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config_file", type=str,
+    parser.add_argument("-c", "--config_file", required=True, type=str,
                         help="config file location")
     parser.add_argument('--forceupdate', action='store_true',
                         help='Whether to force update the maps')
@@ -132,5 +135,4 @@ if __name__ == '__main__':
         train_model(args.config_file, DATA_FP)
 
     if not args.onlysteps or 'visualization' in args.onlysteps:
-        visualize(config['name'])
-
+        visualize(config['name'], config['end_year'])

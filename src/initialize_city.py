@@ -13,7 +13,6 @@ BASE_DIR = os.path.dirname(
 
 
 def make_config_file(yml_file, city, folder, crash, concern):
-
     f = open(yml_file, 'w+')
 
     f.write(

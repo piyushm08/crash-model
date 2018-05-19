@@ -1,4 +1,3 @@
-
 FROM continuumio/miniconda
 # update
 RUN conda update -n base conda

@@ -117,15 +117,9 @@ if __name__ == '__main__':
     if not args.config_path:
         print "config path for files required"
         sys.exit()        
-    print "in init city..."
-    #DATA_FP = os.path.join(BASE_DIR, 'data', args.folder)
-    DATA_FP = args.base_path+ '/data'+ args.folder
-    print "args are"
-    print args
-    print "data_fp is " + args.base_path+ '/data'+ args.folder
 
-
-    # DATA_FP = os.path.join(BASE_DIR, 'data', args.folder)
+    DATA_FP = os.path.join(BASE_DIR, 'data', args.folder)
+ 
 
     crash = args.crash_file.split('/')[-1]
     crash_dir = os.path.join(DATA_FP, 'raw', 'crashes')
@@ -152,7 +146,7 @@ if __name__ == '__main__':
     else:
         print args.folder + " already initialized, skipping"
 
-    #actually should pass in 'src/config/config_'
+    #the actual call should pass in 'src/config/config_'
     yml_file = os.path.join(
         args.config_path + args.folder + '.yml')
     print "yml path is: " + yml_file

@@ -4,7 +4,7 @@ import json
 import shutil
 
 
-def test_initialize_city(tmpdir):
+def test_initialize_city_should_run_successfully(tmpdir):
 
     # Copy test data into temp directory
     orig_path = os.path.dirname(

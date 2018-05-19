@@ -4,11 +4,9 @@ import shutil
 import sys
 from data.util import geocode_address
 
-#pass path to create in into a argument
-#test with small csv for crashes and concerns
-#Mount and test with changes in 
 
-#todo check how to pass this then, actually, not in test
+#We now pass base path and config path through the call to initialize_city.
+#Hence BASE_DIR should be passed from the caller instead.
 BASE_DIR = os.path.dirname(
     os.path.dirname(
         os.path.abspath(__file__)))
@@ -118,7 +116,7 @@ if __name__ == '__main__':
         print "config path for files required"
         sys.exit()        
 
-    DATA_FP = os.path.join(BASE_DIR, 'data', args.folder)
+    DATA_FP = os.path.join(args.base_path, 'data', args.folder)
  
 
     crash = args.crash_file.split('/')[-1]
@@ -155,7 +153,7 @@ if __name__ == '__main__':
         make_config_file(yml_file, args.city, args.folder, crash, concern)
 
     js_file = os.path.join(
-        BASE_DIR, 'reports/config.js')
+        args.base_path, 'reports/config.js')
     if not os.path.exists(js_file):
         print "Writing config.js"
         make_js_config(js_file, args.city, args.folder)

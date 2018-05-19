@@ -20,10 +20,7 @@ def test_initialize_city_should_run_successfully(tmpdir):
     if not os.path.exists(tmpdir.strpath+"config/"):
         print "no config dir, creating one..."
         os.makedirs(tmpdir.strpath+"/config/")
-
-    # if os.path.exists(tmpdir.strpath+"/config/"):
-    #     print "config dir was created with path ..." + tmpdir.strpath+"/config/"
-    #for now just test of this runs
+        os.makedirs(tmpdir.strpath+"/reports/")
     
     subprocess.check_call([
         'python',

@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
     #the actual call should pass in 'src/config/config_'
     yml_file = os.path.join(
-        args.config_path + args.folder + '.yml')
+        args.config_path ,'config_' +args.folder + '.yml')
     print "yml path is: " + yml_file
 
     if not os.path.exists(yml_file):

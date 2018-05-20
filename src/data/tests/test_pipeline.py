@@ -3,7 +3,7 @@ import subprocess
 import json
 import shutil
 
-
+#This is still a work in progress. Code might be incomplete/not working.
 def test_entire_pipeline_should_run_without_errors(tmpdir):
 
     # Copy test data into temp directory

@@ -2,6 +2,7 @@ import os
 import subprocess
 import json
 import shutil
+import yaml
 
 
 def test_initialize_city_should_run_successfully(tmpdir):
@@ -27,15 +28,15 @@ def test_initialize_city_should_run_successfully(tmpdir):
         '-m',
         'initialize_city',
         '-city',
-        'Brishport',
+        'new_city',
         '-basePath',
         tmpdir.strpath,
         '-configPath',
-        os.path.join(tmpdir.strpath, 'config'),
+        os.path.join(tmpdir.strpath, 'config/'),
         '-crash',
         os.path.join(raw_files_path,'Crashes_new_city.csv'),
         '-concern',
         os.path.join(raw_files_path,'Concerns_new_city.csv'),
         '-f',
-        new_city_folder,
+        new_city_folder
     ])

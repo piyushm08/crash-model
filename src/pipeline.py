@@ -98,6 +98,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config_file", required=True, type=str,
                         help="config file location")
+    parser.add_argument("-b", "--base_path", required=True, type=str,
+                        help="base path for data")
+
     parser.add_argument('--forceupdate', action='store_true',
                         help='Whether to force update the maps')
     # Can also choose which steps of the process to run
@@ -114,11 +117,15 @@ if __name__ == '__main__':
     with open(args.config_file) as f:
         config = yaml.safe_load(f)
 
-    DATA_FP = os.path.join(BASE_DIR, 'data', config['name'])
+    #base dir+data+boston
+    DATA_FP = os.path.join(args.base_path, 'data', config['name'])
+
+    #if no steps spec. it will run the entire pipeline
 
     if not args.onlysteps or 'standardization' in args.onlysteps:
         data_standardization(config, DATA_FP, forceupdate=args.forceupdate)
 
+    #Parse start and end year from config, and call data_gen/viz with those
     start_year = config['start_year']
     if start_year:
         start_year = '01/01/{} 00:00:00Z'.format(start_year)

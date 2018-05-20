@@ -1,0 +1,25 @@
+# City name
+city: boston
+# The folder under data where this city's data is stored
+name: boston
+# If given, limit crashes to after start_year and before end_year
+start_year: 2015
+end_year: 2016
+
+##############################################################################
+# Configuration for data standardization
+
+# List of concern type information
+concern_files:
+  - name: concern
+    filename: concern_test_city.csv
+    latitude:
+    longitude:
+    time:
+
+
+# crash file configurations
+crashes_files:
+  crash_test_city.csv:
+    required:
+      id: CAD_EVENT_REL_COMMON_ID

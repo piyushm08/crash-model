@@ -9,18 +9,18 @@ def test_initialize_city_should_run_successfully(tmpdir):
     # Copy test data into temp directory
     orig_path = os.path.dirname(
         os.path.abspath(__file__)) + '/data/'
-    path = tmpdir.strpath + '/data/'
-    raw_files_path = path + 'raw/'
+    path = os.path.join(tmpdir.strpath, 'data')
+    raw_files_path = os.path.join(path ,'test_initialize_city')
     shutil.copytree(orig_path, path)
 
     #other constants that the test needs to pass in
-    new_city_folder = '/new_city'
+    new_city_folder = 'new_city'
 
     #create a config folder in temp directory prior to running the test
-    if not os.path.exists(tmpdir.strpath+"config/"):
+    if not os.path.exists(os.path.join(tmpdir.strpath,'config')):
         print "no config dir, creating one..."
-        os.makedirs(tmpdir.strpath+"/config/")
-        os.makedirs(tmpdir.strpath+"/reports/")
+        os.makedirs(os.path.join(tmpdir.strpath,'config'))
+        os.makedirs(os.path.join(tmpdir.strpath, 'reports'))
     
     subprocess.check_call([
         'python',
@@ -31,11 +31,11 @@ def test_initialize_city_should_run_successfully(tmpdir):
         '-basePath',
         tmpdir.strpath,
         '-configPath',
-        tmpdir.strpath+'/config',
+        os.path.join(tmpdir.strpath, 'config'),
         '-crash',
-        raw_files_path+'Crashes_new_city.csv',
+        os.path.join(raw_files_path,'Crashes_new_city.csv'),
         '-concern',
-        raw_files_path+'Concerns_new_city.csv',
+        os.path.join(raw_files_path,'Concerns_new_city.csv'),
         '-f',
         new_city_folder,
     ])

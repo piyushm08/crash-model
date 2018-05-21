@@ -76,7 +76,8 @@ def write_geocode_cache(results,
             writer.writerow([key, value[0], value[1], value[2]])
 
 
-def geocode_address(address, cached={}):
+def geocode_address(address, geocode_type='google',
+                    cached={}, app_id=None, app_code=None):
     """
     Check an optional cache to see if we already have the geocoded address
     Otherwise, use google's API to look up the address
@@ -91,13 +92,24 @@ def geocode_address(address, cached={}):
     """
     if address in cached.keys():
         return cached[address]
-    g = geocoder.google(address)
-    attempts = 0
-    while g.address is None and attempts < 3:
-        attempts += 1
-        sleep(attempts ** 2)
+
+    if geocode_type == 'google':
         g = geocoder.google(address)
-    return g.address, g.lat, g.lng
+        attempts = 0
+        while g.address is None and attempts < 3:
+            attempts += 1
+            sleep(attempts ** 2)
+            g = geocoder.google(address)
+        return g.address, g.lat, g.lng
+    elif geocode_type == 'here' and app_id and app_code:
+        g = geocoder.here(address, app_id=app_id,
+                          app_code=app_code).json
+        if 'lat' in g.keys():
+            return g['address'], g['lat'], g['lng']
+        else:
+            return None, None, None
+    else:
+        return None, None, None
 
 
 def get_hourly_rates(files):
@@ -330,6 +342,7 @@ def find_nearest(records, segments, segments_index, tolerance,
             record_point = record['point']
 
         record_buffer_bounds = record_point.buffer(tolerance).bounds
+
         nearby_segments = segments_index.intersection(record_buffer_bounds)
 
         segment_id_with_distance = [

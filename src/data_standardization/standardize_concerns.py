@@ -20,7 +20,8 @@ parser.add_argument("-d", "--destination", type=str,
                     help="destination name")
 parser.add_argument("-f", "--folder", type=str,
                     help="absolute path to destination folder")
-
+# parser.add_argument("-c", "--config_path", type=str,
+#                         help="path to config file")
 args = parser.parse_args()
 
 raw_path = os.path.join(args.folder, "raw/concerns")

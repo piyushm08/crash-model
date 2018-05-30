@@ -28,7 +28,9 @@ def data_standardization(config, DATA_FP, forceupdate=False):
             '-d',
             config['name'],
             '-f',
-            DATA_FP
+            DATA_FP,
+            '--config_path',
+            args.config_file
         ])
     else:
         print "Already standardized crash data, skipping"
@@ -45,6 +47,8 @@ def data_standardization(config, DATA_FP, forceupdate=False):
             config['name'],
             '-f',
             DATA_FP
+            # '--config_path',
+            # args.config_file
         ])
     else:
         if 'concern_files' not in config.keys() or not config['concern_files']:

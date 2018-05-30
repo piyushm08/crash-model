@@ -137,6 +137,8 @@ if __name__ == '__main__':
                         help="destination name, e.g. boston")
     parser.add_argument("-f", "--folder", type=str,
                         help="path to destination's data folder")
+    parser.add_argument("-c", "--config_path", type=str,
+                        help="path to config file")
 
     args = parser.parse_args()
 
@@ -145,9 +147,10 @@ if __name__ == '__main__':
         print raw_path+" not found, exiting"
         exit(1)
 
-    # load config for this city
-    config_file = os.path.join(BASE_FP, 'src/config',
-                               "config_"+args.destination+".yml")
+    # load config for this city BASE_FP, 'src/config',"config_"+args.destination+".yml"
+    config_file = args.config_path
+    print 'args is...'
+    print config_file
     with open(config_file) as f:
         config = yaml.safe_load(f)
 

@@ -33,21 +33,18 @@ BASE_DIR = os.path.dirname(
         os.path.dirname(
             os.path.abspath(__file__))))
 
-DATA_FP = BASE_DIR + '/data/processed/'
-
-
 # parse arguments
 parser = argparse.ArgumentParser(description="Plot point-level data on a map")
 parser.add_argument("-n", "--name", nargs="+",
                     help="name of the layer, must be unique")
 parser.add_argument("-f", "--filename", nargs="+",
                     help="name of the dataset file to be plotted on the map, must specify at least 1")
-parser.add_argument("-lat", "--latitude",
-                    help="alternate latitude for the base map")
-parser.add_argument("-lon", "--longitude",
-                    help="alternate longitude for the base map")
-parser.add_argument("-dir", "--datadir",
-                    help="alternate data directory for the files")
+parser.add_argument("-lat", "--latitude", nargs=1,
+                    help="latitude for the base map")
+parser.add_argument("-lon", "--longitude", nargs=1,
+                    help="longitude for the base map")
+parser.add_argument("-dir", "--datadir", nargs=1,
+                    help="data directory for the files")
 
 args = parser.parse_args()
 
@@ -57,11 +54,10 @@ if len(args.name) == len(args.filename):
 else:
     raise Exception("Number of layers and files must match")
 
-latitude = args.latitude or 42.3601
-longitude = args.longitude or -71.0589
+latitude = float(args.latitude[0])
+longitude = float(args.longitude[0])
 
-if args.datadir:
-    DATA_FP = args.datadir
+DATA_FP = args.datadir[0]
 
 def process_data(filename):
     """Preps data for plotting on a map
@@ -112,9 +108,8 @@ def add_layer(dataset, layername, mapname, color):
 ### Make map
 
 # First create basemap
-boston_map = folium.Map(
-    [latitude, longitude], tiles='Cartodb dark_matter', zoom_start=12)
-folium.TileLayer('Cartodb Positron').add_to(boston_map)
+map = folium.Map([latitude, longitude], tiles='Cartodb dark_matter', zoom_start=12)
+folium.TileLayer('Cartodb Positron').add_to(map)
 
 # Create sequence of colors so different layers appear in different colors
 colors = ['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854']
@@ -122,11 +117,11 @@ colors = ['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854']
 # Plot data as separate layers
 for i in range(len(match)):
     data = process_data(match[i][1])
-    add_layer(data, match[i][0], boston_map, colors[i])
+    add_layer(data, match[i][0], map, colors[i])
 
 # Add control to toggle between model layers
-folium.LayerControl(position='bottomright').add_to(boston_map)
+folium.LayerControl(position='bottomright').add_to(map)
 
 
 # Save map as separate html file
-boston_map.save('plot_points.html')
+map.save('plot_points.html')

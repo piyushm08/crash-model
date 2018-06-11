@@ -9,7 +9,10 @@ Usage:
     --name: name of the data to be plotted
             this will be used as the name of the layers in the map so they must be unique
     --filename: filename of the dataset
-            must be csvs with separate columns named "X" and "Y" for the X and Y coordinates 
+            must be csvs with separate columns named "X" and "Y" for the X and Y coordinates
+    --latitude: latitude of the city you want to map
+    --longitude: longitude of the city you want to map
+    --datadir: absolute filepath where your dataset is saved in
 
 Inputs:
     csv files of point-level data to be visualized

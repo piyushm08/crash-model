@@ -2,11 +2,14 @@
 city: Boston, Massachusetts, USA
 # The folder under data where this city's data is stored
 name: boston
+# City centerpoint latitude & longitude
 city_latitude: 42.3600825
 city_longitude: -71.0588801
+# Radius of city's road network from centerpoint in km (required if OSM has no polygon data)
+city_radius: 15
 # If given, limit crashes to after start_year and before end_year
-start_year:
-end_year:
+start_year: 2015
+end_year: 2018
 
 ##############################################################################
 # Configuration for data standardization
@@ -26,39 +29,16 @@ concern_files:
 
 # crash file configurations
 crashes_files:
-  2015motorvehicles_with_modetype.csv:
-    required:
-      id: CAD_EVENT_REL_COMMON_ID
-      latitude: Y
-      longitude: X
-      date: CALENDAR_DATE
-      time: TIME,
-    optional:
-      summary: FIRST_EVENT_SUBTYPE
-      vehicles: mode_type
-      bikes: mode_type
-  cad_crash_events_with_transport_2016_wgs84_with_modetype.csv:
-    required:
-      id: CAD_EVENT_REL_COMMON_ID
-      latitude: Y
-      longitude: X
-      date: CALENDAR_DATE
-      time: TIME
-    optional:
-      summary: FIRST_EVENT_SUBTYPE
-      vehicles: mode_type
-      bikes: mode_type
-  2017motorvehicles_with_modetype.csv:
-    required:
-      id: CAD_EVENT_REL_COMMON_ID
-      latitude: Y
-      longitude: X
-      date: CALENDAR_DATE
-      time: TIME,
-    optional:
-      summary: FIRST_EVENT_SUBTYPE
-      vehicles: mode_type
-      bikes: mode_type
+    vzopendata.csv:
+        required:
+            id: ID
+            latitude: lat
+            longitude: long
+            date: dispatch_ts
+        optional:
+            summary: location_type
+            vehicles: mode_type
+            bikes: mode_type
 
 ##############################################################################
 
@@ -66,12 +46,8 @@ crashes_files:
 # these variables below
 
 # If you are adding another map and its features to the open street map,
-# give it here:
-extra_map: ../data/boston/raw/maps/Boston_Segments.shp
-
-# Also need to give a map in 3857 projection.
-# This is required if extra_map is given
-extra_map3857: ../data/boston/raw/maps/ma_cob_spatially_joined_streets.shp
+# give it here.  Required to be in 3857 projection
+extra_map: ../data/boston/raw/maps/ma_cob_spatially_joined_streets.shp
 
 # Additional features to add from the additional map.
 # This is required if extra_map is given

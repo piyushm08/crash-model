@@ -51,11 +51,11 @@ Any city that wishes to can make use of the project. At a minimum, geo-coded his
 
 **What is the release schedule?**
 
-The intended roadmap of development for the project can be found at [https://github.com/Data4Democracy/boston-crash-modeling/projects](https://github.com/Data4Democracy/boston-crash-modeling/projects)
+The intended roadmap of development for the project can be found at [https://github.com/Data4Democracy/crash-model/projects](https://github.com/Data4Democracy/crash-model/projects)
 
 **How can I access the project?**
 
-This repo can be downloaded and run in its entirity using Docker, or you can see a current deployment of the project at [https://boston-crash-model.firebaseapp.com/](https://github.com/Data4Democracy/boston-crash-modeling/projects)
+This repo can be downloaded and run in its entirity using Docker, or you can see a current deployment of the project at [https://boston-crash-model.firebaseapp.com/](https://github.com/Data4Democracy/crash-model/projects)
 
 
 
@@ -99,46 +99,48 @@ Getting Started
 
 ### Dependencies:
 Most of the work on this project so far has been done in Python, in Jupyter notebooks.
-- Python 2.7 (we recommend [Anaconda](https://www.continuum.io/downloads))
+- Python 3.6 (we recommend [Anaconda](https://www.continuum.io/downloads))
 - conda (included with Anaconda)
 
 ### Environment:
 You'll want to reproduce the packages and package versions required to run code in this repo, ideally in a virtual environment to avoid conflicts with other projects you may be working on. We've tested the environment.yml file on a Windows 64-bit machine and Linux and have done our best to ensure cross-platform compatibility, but if it doesn't work for you, please file an issue.
 
     $ conda env create -f environment.yml
-    $ activate boston-crash-model
+    $ activate crash-model
 
-If you'd prefer to use a requirements.txt file, one is available in the [data_gen folder](https://github.com/Data4Democracy/boston-crash-modeling/tree/master/notebooks/data_generation) for spatial features analysis and in the [benchmark folder](https://github.com/Data4Democracy/boston-crash-modeling/tree/master/notebooks/benchmark) for running the benchmark model.
+If you'd prefer to use a requirements.txt file, one is available in the [data_gen folder](https://github.com/Data4Democracy/crash-model/tree/master/notebooks/data_generation) for spatial features analysis and in the [benchmark folder](https://github.com/Data4Democracy/crash-model/tree/master/notebooks/benchmark) for running the benchmark model.
 
 ### Docker:
-A basic Docker image has been created to run the project in a container, using the ContinuumIO anaconda base image (Python 2.7). Right now the image simply installs the project code & its dependencies, creates the 'boston-crash-model' virtual environment and starts an apache2 webserver (via supervisor daemon) to serve the visualization. You can download the pre-built image by running the following from a machine with the Docker engine installed:
+A basic [Docker](https://www.docker.com) image has been created to run the project in a container, using the ContinuumIO miniconda3 base image (Python 3.6). The virtual environment 'crash-model' is installed and activated when the image is started via container, as well as an apache2 webserver via supervisord to serve the visualization.
 
-	$ docker pull datafordemocracy/boston-crash-modeling:latest
+You can download the latest stable image from D4D's Docker Hub repo by running the following command, from a machine with the Docker engine installed:
 
- Alternatively you can build the image yourself from the Dockerfile by running the following from within the project repo:
+	$ docker pull datafordemocracy/crash-model:latest
 
-	$ docker build --tag datafordemocracy/boston-crash-modeling:latest .
+Automatic building of images from the project's GitHub project have been configured to run on every commit to a branch. To see all available tagged versions of the image and their date of creation, see [https://hub.docker.com/r/datafordemocracy/crash-model/tags/](https://hub.docker.com/r/datafordemocracy/crash-model/tags/)
 
-Once you have downloaded or built the image, you can run it in a container:
+For testing purposes you can build the image yourself from the Dockerfile by running the following from within the project repo:
 
-	$ docker run -d -p 8080:8080 --name bcm.local -v /local/path/to/project_repo:/app datafordemocracy/boston-crash-modeling:latest
+	$ docker build --tag datafordemocracy/crash-model:[tag] .
+
+Once you have the image, you can run it in a container. The project folder (/app) is intentionally empty within the image, so you'll also need the project repo from GitHub available on your local machine. To do this run:
+
+	$ docker run -d -p 8080:8080 --name bcm.local -v /local/path/to/project_repo:/app datafordemocracy/crash-model:[tag]
 
 The arguments to this command perform the following:
 
 1. -d detaches the container and runs it in the background (gives you your shell back)
 2. -p 8080:8080 maps port 8080 from the container to 8080 on your local machine (required if you want to view the visualization via browser)
 3. --name bcm.local names the container 'bcm.local' (or whatever value you specify)
-4. -v /local/path/to/project_repo:/app mounts your local machine's copy of the project repo into /app in the container. Without this, you will likely be running an out of date version of the project code.
+4. -v /local/path/to/project_repo:/app mounts your local machine's copy of the project repo into /app in the container.
 
-The visualization should now be visible at http://localhost:8080/reports/historical_crash_map.html
-
-Once you have a running container, you can get a shell on it to test scripts etc. by running:
+Once you have a running container, you can get a shell on it to run the pipeline, test scripts etc. by running:
 
 	$ docker exec -it bcm.local /bin/bash
 
 ### Data:
 
-At the moment, the [RF benchmark model](https://github.com/Data4Democracy/boston-crash-modeling/blob/master/notebooks/benchmark/crash_predict_benchmark.ipynb) is running off of a dataset of historical crashes in 2016 per street segment + week. All our processed data is in a private repository in data.world [here](https://data.world/data4democracy/boston-crash-model) -- ping a project lead or maintainer on Slack to get access. More detailed documentation is contained there.
+At the moment, the [RF benchmark model](https://github.com/Data4Democracy/crash-model/blob/master/notebooks/benchmark/crash_predict_benchmark.ipynb) is running off of a dataset of historical crashes in 2016 per street segment + week. All our processed data is in a private repository in data.world [here](https://data.world/data4democracy/boston-crash-model) -- ping a project lead or maintainer on Slack to get access. More detailed documentation is contained there.
 
 Data can be downloaded from the web frontend to data.world; it is expected to reside in the data directory.
 

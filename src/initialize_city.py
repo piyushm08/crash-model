@@ -18,6 +18,11 @@ def make_config_file(yml_file, city, folder, crash, concern):
     f.write(
         "# City name\n" +
         "city: {}\n".format(city) +
+        "# City centerpoint latitude & longitude\n" +
+        "city_latitude: \n" +
+        "city_longitude: \n" +
+        "# Radius of city's road network from centerpoint in km (required if OSM has no polygon data)\n" +
+        "city_radius: \n" +
         "# The folder under data where this city's data is stored\n" +
         "name: {}\n".format(folder) +
         "# If given, limit crashes to after start_year and before end_year\n" +
@@ -44,24 +49,24 @@ def make_config_file(yml_file, city, folder, crash, concern):
 
     if concern:
         f.write(
-            "# List of concern type information" +
+            "# List of concern type information\n" +
             "concern_files:\n" +
-            "- name: concern\n" +
-            "filename: {}\n".format(concern) +
-            "latitude: \n" +
-            "longitude: \n" +
-            "time: \n\n\n"
+            "  - name: concern\n" +
+            "      filename: {}\n".format(concern) +
+            "      latitude: \n" +
+            "      longitude: \n" +
+            "      time: \n\n\n"
         )
     f.write(
         "# week on which to predict crashes (week, year)\n" +
         "# Best practice is to choose a week towards the end of your crash data set\n" +
         "# in format [month, year]\n" +
-        "time_target: [30, 2017]\n" + 
+        "time_target: [30, 2017]\n" +
         "# specify how many weeks back to predict in output of train_model\n"+
         "weeks_back: 1"
     )
     f.close()
-    print "Wrote new configuration file in {}".format(yml_file)
+    print("Wrote new configuration file in {}".format(yml_file))
 
 
 def make_js_config(jsfile, city, folder):
@@ -128,7 +133,7 @@ if __name__ == '__main__':
     # Check to see if the directory exists
     # if it does, it's already been initialized, so do nothing
     if not os.path.exists(DATA_FP):
-        print "Making directory structure under " + DATA_FP
+        print("Making directory structure under " + DATA_FP)
         os.makedirs(DATA_FP)
         os.makedirs(os.path.join(DATA_FP, 'raw'))
         os.makedirs(crash_dir)
@@ -143,7 +148,7 @@ if __name__ == '__main__':
                 concern_dir, concern))
 
     else:
-        print args.folder + " already initialized, skipping"
+        print(args.folder + " already initialized, skipping")
 
     #the actual call should pass in 'src/config/config_'
     yml_file = os.path.join(
@@ -156,5 +161,5 @@ if __name__ == '__main__':
     js_file = os.path.join(
         args.base_path, 'reports/config.js')
     if not os.path.exists(js_file):
-        print "Writing config.js"
+        print("Writing config.js")
         make_js_config(js_file, args.city, args.folder)

@@ -109,6 +109,10 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--datadir', type=str,
                         help="data directory")
 
+    parser.add_argument('-basePath', '--base_path', type=str,
+                        help="base file path")
+
+
     args = parser.parse_args()
 
     config = {}
@@ -118,7 +122,7 @@ if __name__ == '__main__':
             config = yaml.safe_load(f)
     set_defaults(config)
 
-    DATA_FP = os.path.join(BASE_DIR, 'data', config['name'], 'processed/')
+    DATA_FP = os.path.join(args.base_path, 'data', config['name'], 'processed/')
     print(('Outputting to: %s' % DATA_FP))
 
     # Default

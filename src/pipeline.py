@@ -83,7 +83,7 @@ def data_generation(config_file, DATA_FP, start_year=None, end_year=None,
     )
 
 
-def train_model(config_file, DATA_FP):
+def train_model(config_file, DATA_FP, base_path):
     """
     Trains the model
     Args:
@@ -98,7 +98,9 @@ def train_model(config_file, DATA_FP):
         '-c',
         config_file,
         '-d',
-        DATA_FP
+        DATA_FP,
+        '-basePath',
+        base_path
     ])
 
 
@@ -168,7 +170,7 @@ if __name__ == '__main__':
                         forceupdate=args.forceupdate)
 
     if not args.onlysteps or 'model' in args.onlysteps:
-        train_model(args.config_file, DATA_FP)
+        train_model(args.config_file, DATA_FP, args.base_path)
 
     if not args.onlysteps or 'visualization' in args.onlysteps:
         visualize(config['name'], config['end_year'])

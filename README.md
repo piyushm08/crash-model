@@ -123,16 +123,16 @@ For testing purposes you can build the image yourself from the Dockerfile by run
 
 	$ docker build --tag datafordemocracy/crash-model:[tag] .
 
-Once you have the image, you can run it in a container. The project folder (/app) is intentionally empty within the image, so you'll also need the project repo from GitHub available on your local machine. To do this run:
+Once you have the image, you can run it in a container. The project folder (/app) is intentionally empty within the image, so you'll also need the project repo from GitHub available on your local machine. To do this, clone the project from github, cd into it and run:
 
-	$ docker run -d -p 8080:8080 --name bcm.local -v /local/path/to/project_repo:/app datafordemocracy/crash-model:[tag]
+	$ docker run -d -p 8080:8080 --name bcm.local -v `pwd`:/app datafordemocracy/crash-model:[tag]
 
 The arguments to this command perform the following:
 
 1. -d detaches the container and runs it in the background (gives you your shell back)
 2. -p 8080:8080 maps port 8080 from the container to 8080 on your local machine (required if you want to view the visualization via browser)
 3. --name bcm.local names the container 'bcm.local' (or whatever value you specify)
-4. -v /local/path/to/project_repo:/app mounts your local machine's copy of the project repo into /app in the container.
+4. -v `pwd`:/app mounts your local machine's copy of the project repo into /app in the container.
 
 Once you have a running container, you can get a shell on it to run the pipeline, test scripts etc. by running:
 

@@ -106,19 +106,19 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not args.city:
-        print "city required"
+        print("city required")
         sys.exit()
     if not args.folder:
-        print "folder required"
+        print("folder required")
         sys.exit()
     if not args.crash_file:
-        print "crash file required"
+        print("crash file required")
         sys.exit()
     if not args.base_path:
-        print "base path for files required"
+        print("base path for files required")
         sys.exit()
     if not args.config_path:
-        print "config path for files required"
+        print("config path for files required")
         sys.exit()        
 
     DATA_FP = os.path.join(args.base_path, 'data', args.folder)
@@ -153,7 +153,6 @@ if __name__ == '__main__':
     #the actual call should pass in 'src/config/config_'
     yml_file = os.path.join(
         args.config_path ,'config_' +args.folder + '.yml')
-    print "yml path is: " + yml_file
 
     if not os.path.exists(yml_file):
         make_config_file(yml_file, args.city, args.folder, crash, concern)

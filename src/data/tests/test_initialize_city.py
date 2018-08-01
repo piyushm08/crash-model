@@ -19,7 +19,7 @@ def test_initialize_city_should_run_successfully(tmpdir):
 
     #create a config folder in temp directory prior to running the test
     if not os.path.exists(os.path.join(tmpdir.strpath,'config')):
-        print "no config dir, creating one..."
+        print("no config dir, creating one...")
         os.makedirs(os.path.join(tmpdir.strpath,'config'))
         os.makedirs(os.path.join(tmpdir.strpath, 'reports'))
     

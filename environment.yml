@@ -3,8 +3,10 @@ channels:
 - conda-forge
 - defaults
 dependencies:
+- codecov
 - fiona
 - folium
+- gdal=2.2.4
 - geopandas
 - geocoder
 - geojson
@@ -21,6 +23,7 @@ dependencies:
 - pytest
 - python=3.6
 - pyyaml
+- pytest-cov
 - rtree
 - seaborn
 - scikit-learn

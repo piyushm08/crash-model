@@ -149,8 +149,8 @@ if __name__ == '__main__':
 
     # load config for this city BASE_FP, 'src/config',"config_"+args.destination+".yml"
     config_file = args.config_path
-    print 'args is...'
-    print config_file
+    # print 'args is...'
+    # print config_file
     with open(config_file) as f:
         config = yaml.safe_load(f)
 

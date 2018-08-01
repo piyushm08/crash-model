@@ -24,7 +24,9 @@ parser.add_argument("-f", "--folder", type=str,
 #                         help="path to config file")
 args = parser.parse_args()
 
-raw_path = os.path.join(args.folder, "raw/concerns")
+raw_path = os.path.join(args.folder, "raw/concerns/")
+print("files in raw_path......")
+print(raw_path)
 if not os.path.exists(raw_path):
     print(raw_path+" not found, exiting")
     exit(1)

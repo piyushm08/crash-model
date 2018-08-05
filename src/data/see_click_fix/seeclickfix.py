@@ -12,7 +12,7 @@ def convert_to_csv(filename):
     with open(filename + '.json', 'r') as f:
         tickets = json.load(f)
 
-        print "Converting " + str(len(tickets)) + " tickets to csv"
+        print("Converting " + str(len(tickets)) + " tickets to csv")
         # Since this so far only looks at Boston, hard coding
         # fields we care about.  Will need to check against other cities
         fieldnames = ['X', 'Y', 'type', 'created', 'summary', 'description']
@@ -50,15 +50,15 @@ def get_tickets(place_url, outfile, statuses=[
         curr_page = requests.get(request_str)
 
         md = curr_page.json()['metadata']['pagination']
-        print "Getting " + str(md['pages']) + " pages of see click fix data"
+        print("Getting " + str(md['pages']) + " pages of see click fix data")
 
         next_page_url = md['next_page_url']
         all = curr_page.json()['issues']
-        print "page:" + str(md['page'])
+        print("page:" + str(md['page']))
         while next_page_url:
             curr_page = requests.get(next_page_url)
             md = curr_page.json()['metadata']['pagination']
-            print "page:" + str(md['page'])
+            print("page:" + str(md['page']))
             all += curr_page.json()['issues']
             next_page_url = md['next_page_url']
             time.sleep(.5)
@@ -66,7 +66,7 @@ def get_tickets(place_url, outfile, statuses=[
         with open(outfile, 'w') as f:
             json.dump(all, f)
     else:
-        print "See click fix file already exists, skipping query..."
+        print("See click fix file already exists, skipping query...")
 
 if __name__ == '__main__':
 

@@ -83,6 +83,9 @@ def data_generation(config_file, DATA_FP, start_year=None, end_year=None,
         end_year (optional)
     """
     print("Generating data and features...")
+
+    # DATA_FP is test_dir+'/test_pipeline/data/boston
+
     subprocess.check_call([
         'python',
         '-m',
@@ -163,7 +166,12 @@ if __name__ == '__main__':
     with open(args.config_file) as f:
         config = yaml.safe_load(f)
 
-    #base dir+data+boston
+    #tmp_orig_path is test_dir+'/test_pipeline/'
+    #config file is test_dir+'/test_pipeline/config_boston.yml
+    #raw and processed data is in  test_dir+'/test_pipeline/data/boston/raw and
+    #test_dir+'/test_pipeline/data/boston/processed
+
+    # DATA_FP is test_dir+'/test_pipeline/data/boston
     DATA_FP = os.path.join(args.base_path, 'data', config['name'])
 
     #if no steps spec. it will run the entire pipeline

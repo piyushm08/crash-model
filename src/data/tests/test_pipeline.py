@@ -25,9 +25,14 @@ def test_entire_pipeline_should_run_without_errors(tmpdir):
 
     os.makedirs(city_level_data_path_standardized)
 
+    #orig path is current_directory/data/
     shutil.copytree(orig_path+'/raw/', city_level_data_path_raw)
     shutil.copytree(orig_path+'/boston/processed/', city_level_data_path_processed)
 
+    #tmp_orig_path is test_dir+'/test_pipeline/'
+    #config file is test_dir+'/test_pipeline/config_boston.yml
+    #raw and processed data is in  test_dir+'/test_pipeline/data/boston/raw and
+    #test_dir+'/test_pipeline/data/boston/processed
     subprocess.check_call([
         'python',
         '-m',

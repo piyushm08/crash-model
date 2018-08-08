@@ -16,6 +16,7 @@ BASE_DIR = os.path.dirname(
         os.path.dirname(
             os.path.abspath(__file__))))
 
+
 PROCESSED_DATA_FP = os.path.join(BASE_DIR, 'data/processed')
 STANDARDIZED_DATA_FP = os.path.join(BASE_DIR, 'data', 'standardized')
 
@@ -196,7 +197,10 @@ def propagate_volume():
 
 if __name__ == '__main__':
 
+    print("in Propagate volume......")
     parser = argparse.ArgumentParser()
+
+    # DATA_FP is test_dir+'/test_pipeline/data/boston
     parser.add_argument("-d", "--datadir", type=str,
                         help="Can give alternate data directory.")
     # Can force update
@@ -205,13 +209,14 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if args.datadir:
+        # We mean  test_dir+'/test_pipeline/data/boston/processed,
+        # test_dir+'/test_pipeline/data/boston/standardized
         PROCESSED_DATA_FP = os.path.join(args.datadir, 'processed')
         STANDARDIZED_DATA_FP = os.path.join(args.datadir, 'standardized')
 
     if not os.path.exists(os.path.join(STANDARDIZED_DATA_FP, 'volume.json')):
         print("No volumes found, skipping...")
         sys.exit()
-
+    else
+        print("volumes found")
     propagate_volume()
-
-

@@ -85,11 +85,24 @@ def propagate_volume():
 
     # Should deprecate once imputed atrs are used, but for the moment
     # this is needed for make_canon_dataset
+
+    if not os.path.exists(os.path.join(PROCESSED_DATA_FP, 'snapped_atrs.json')):
+        print("no snapped data found....!")
+    else:
+        print("snapped data has been found.....")
+    print(os.path.join(PROCESSED_DATA_FP,'snapped_atrs.json'))
+    print("*******volume raw is*******************************************")
+    print(volume)
+    print("**************************************************")
+
+
     with open(os.path.join(PROCESSED_DATA_FP, 'snapped_atrs.json'), 'w') as f:
         json.dump([x['properties'] for x in volume], f)
 
     volume_df = json_normalize(volume)
-    
+    print("vol df is...")
+    print(volume_df.head())
+    print("**************************************************")
     volume_df = volume_df[[
         'properties.near_id',
         'properties.heavy',
@@ -217,6 +230,6 @@ if __name__ == '__main__':
     if not os.path.exists(os.path.join(STANDARDIZED_DATA_FP, 'volume.json')):
         print("No volumes found, skipping...")
         sys.exit()
-    else
+    else:
         print("volumes found")
     propagate_volume()

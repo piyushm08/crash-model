@@ -42,5 +42,5 @@ def test_entire_pipeline_should_run_without_errors(tmpdir):
         '--config_file',
         tmp_orig_path+'config_boston.yml',
         '--onlysteps',
-        'generation, standardization,model'
+        'generation, standardization'
     ])

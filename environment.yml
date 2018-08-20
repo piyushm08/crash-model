@@ -6,7 +6,6 @@ dependencies:
 - codecov
 - fiona
 - folium
-- gdal=2.2.4
 - geopandas
 - geocoder
 - geojson
@@ -19,6 +18,7 @@ dependencies:
 - osmnx
 # Weird conda packaging bug, will want to revisit version of pandas later
 - pandas=0.22
+- pylint
 - pyproj
 - pytest
 - python=3.6

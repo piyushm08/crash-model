@@ -1,10 +1,9 @@
 import os
-<<<<<<< HEAD
 import subprocess
 import json
 import shutil
 import yaml
-
+import py
 
 def test_initialize_city_should_run_successfully(tmpdir):
 
@@ -41,13 +40,14 @@ def test_initialize_city_should_run_successfully(tmpdir):
         '-f',
         new_city_folder
     ])
-=======
-import py
-import initialize_city
 
 
-def test_initialize_city_brisbane():
+def test_initialize_city_brisbane(monkeypatch):
 
+    def mockreturn(address):
+        return "Brisbane, Australia", -27.4697707, 153.0251235, 'S'
+
+    monkeypatch.setattr(initialize_city, 'geocode_address', mockreturn)
     tmpdir = py.path.local('/tmp')
 
     # Generate a test config for Brisbane
@@ -112,4 +112,3 @@ weeks_back: 1"""
         test_file_contents = test_file.read()
 
     assert test_file_contents == expected_file_contents
->>>>>>> origin/master

@@ -118,11 +118,11 @@ def simple_get_roads(config):
     # Copy and remove temp directory
     tempdir = os.path.join(MAP_FP, 'temp')
     for filename in os.listdir(os.path.join(tempdir, 'edges')):
-        name, extension = filename.split('.')
+        _, extension = filename.split('.')
         shutil.move(os.path.join(tempdir, 'edges', filename),
                     os.path.join(MAP_FP, 'osm_ways.' + extension))
     for filename in os.listdir(os.path.join(tempdir, 'nodes')):
-        name, extension = filename.split('.')
+        _, extension = filename.split('.')
         shutil.move(os.path.join(tempdir, 'nodes', filename),
                     os.path.join(MAP_FP, 'osm_nodes.' + extension))
     shutil.rmtree(tempdir)
@@ -261,10 +261,17 @@ def clean_ways(orig_file, DOC_FP):
         width = 0
         if 'width' in list(way_line['properties']):
             width = way_line['properties']['width']
+            # This indicates two segments combined together
             if not width or ';' in width or '[' in width:
                 width = 0
             else:
-                width = round(float(width))
+                width = re.sub('[^0-9]+', '', width)
+                # Sometimes there's bad (non-numeric) width
+                # If so, skip
+                if width:
+                    width = round(float(width))
+                else:
+                    width = 0
 
         lanes = way_line['properties']['lanes']
         if lanes:

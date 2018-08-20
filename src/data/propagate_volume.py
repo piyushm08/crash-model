@@ -227,6 +227,12 @@ if __name__ == '__main__':
         PROCESSED_DATA_FP = os.path.join(args.datadir, 'processed')
         STANDARDIZED_DATA_FP = os.path.join(args.datadir, 'standardized')
 
+    if not os.path.exists(os.path.join(PROCESSED_DATA_FP, 'snapped_atrs.json')):
+        print("No atrs found, skipping...")
+        sys.exit()
+    else:
+        print("atrs found")
+
     if not os.path.exists(os.path.join(STANDARDIZED_DATA_FP, 'volume.json')):
         print("No volumes found, skipping...")
         sys.exit()

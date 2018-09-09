@@ -27,7 +27,7 @@ def test_entire_pipeline_should_run_without_errors(tmpdir):
 
     #orig path is current_directory/data/
     shutil.copytree(orig_path+'/raw/', city_level_data_path_raw)
-    shutil.copytree(orig_path+'/boston/processed/', city_level_data_path_processed)
+    # shutil.copytree(orig_path+'/boston/processed/', city_level_data_path_processed)
 
     #tmp_orig_path is test_dir+'/test_pipeline/'
     #config file is test_dir+'/test_pipeline/config_boston.yml
@@ -42,5 +42,5 @@ def test_entire_pipeline_should_run_without_errors(tmpdir):
         '--config_file',
         tmp_orig_path+'config_boston.yml',
         '--onlysteps',
-        'generation, standardization'
+        'generation'
     ])

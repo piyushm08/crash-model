@@ -126,6 +126,42 @@ def get_connections(points, segments):
     return resulting_inters
 
 
+def is_median(roads, road_lines_index, road):
+    # Get the roads that overlap the buffer with the same name
+    # These are potential median segments
+    if not road.properties['oneway']:
+        return 0
+
+    overlapping = []
+    for idx in road_lines_index.intersection(road.geometry.bounds):
+        overlapping_road = roads[idx]
+
+        if overlapping_road.properties['id'] != road.properties['id'] and \
+           overlapping_road.properties['name'] == road.properties['name'] and \
+           overlapping_road.properties['oneway']:
+            overlapping.append(overlapping_road)
+    if overlapping:
+        # Go through the overlapping segments and see how much overlap there is
+        for overlap in overlapping:
+            road_bounds = road.geometry.buffer(20, cap_style=2)
+            overlap_length = overlap.geometry.difference(road_bounds).length
+            if overlap_length:
+                # See if the overlapping road is almost entirely within
+                # the original road
+                if overlap_length < 12:
+                    return 1
+                else:
+                    # Otherwise see if the original road is almost entirely
+                    # within the overlapping road
+                    overlap_bounds = overlap.geometry.buffer(20, cap_style=2)
+                    overlap_length = road.geometry.difference(
+                        overlap_bounds).length
+
+                    if overlap_length < 12:
+                        return 1
+    return 1
+
+
 def find_non_ints(roads, int_buffers):
     """
     Find the segments that aren't intersections

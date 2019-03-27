@@ -101,3 +101,7 @@ data/
 
 # Terraform plugins
 conf/terraform/.terraform
+
+#IDE/Mac dir files
+.DS_Store
+.idea/

@@ -1,0 +1,29 @@
+{
+    "title":"Predictions",
+    "description":"Defines structure of model output",
+    "items": {
+        "features": {
+            "description":"List of feature names",
+            "type":"array of string"
+        },
+        "importances": {
+            "description":"List of feature importances",
+            "type":"array of float"
+        },
+        "prediction_splits": {
+            "description":"Max prediction value for each split of prediction scores",
+            "type":"array of float"
+        },
+        "city_avg": {
+            "description":"List of city average value for features in model",
+            "type":"array of float"
+        },
+        "prediction_split_avg": {
+            "description":"City average value for features for each prediction split",
+            "type":"dictionary of array of float"
+        },
+        "segment_predictions": {
+            "description":"Prediction split index for each segment",
+            "type":"dictionary of array of integer"
+    }
+}
